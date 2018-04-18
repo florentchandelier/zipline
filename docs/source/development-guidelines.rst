@@ -149,9 +149,6 @@ __ http://www.sphinx-doc.org/en/stable/
 .. code-block:: bash
 
    $ pip install -r ./etc/requirements_docs.txt
-   # assuming you're in the Zipline root directory
-   # this is necessary to build the docs
-   $ python setup.py install
 
 To build and view the docs locally, run:
 
