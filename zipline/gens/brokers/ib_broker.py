@@ -131,6 +131,8 @@ class TWSConnection(EClientSocket, EWrapper):
 
         self._download_account_details()
         log.info("Managed accounts: {}".format(self.managed_accounts))
+        if len(self.managed_accounts) > 1:
+            log.info("Multiple linked accounts are detected. You will need to specify one Account to trade on")
 
         self.reqCurrentTime()
         self.reqIds(1)
@@ -149,6 +151,7 @@ class TWSConnection(EClientSocket, EWrapper):
         while self.managed_accounts is None:
             sleep(_poll_frequency)
 
+        self.managed_accounts = [nonempty for nonempty in self.managed_accounts if nonempty]
         for account in self.managed_accounts:
             self.reqAccountUpdates(subscribe=True, acctCode=account)
         while self.accounts_download_complete is False:
@@ -486,13 +489,25 @@ class IBBroker(Broker):
         self._transactions = {}
 
         self._tws = TWSConnection(tws_uri)
-        self.account_id = (self._tws.managed_accounts[0] if account_id is None
-                           else account_id)
+
+        if account_id is None and len(self._tws.managed_accounts) == 1:
+            self.account_id = self._tws.managed_accounts[0]
+        elif account_id is None:
+            log.error("Multiple linked-accounts detected for Single Sign-On, BUT no account ID as been specified")
+            self._tws.close()
+        else:
+            self.set_account_id(account_id)
+
         self.currency = 'USD'
 
         self._subscribed_assets = []
 
         super(self.__class__, self).__init__()
+
+    def set_account_id (self, accountid):
+        self.account_id = accountid
+        self._tws.reqAccountUpdates (subscribe=True, acctCode=self.account_id)
+        log.info("Updating Linked Account to : {}".format(self.account_id))
 
     @property
     def subscribed_assets(self):

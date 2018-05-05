@@ -202,6 +202,12 @@ def ipython_only(option):
     help='Connection to broker',
 )
 @click.option(
+    '--account-id',
+    default='',
+    metavar='ACT-ID',
+    help='Account ID to trade on from a single sign-on (SSO) for consolidated/individual or linked/advisor accounts',
+)
+@click.option(
     '--state-file',
     default=None,
     metavar='FILENAME',
@@ -234,6 +240,7 @@ def run(ctx,
         local_namespace,
         broker,
         broker_uri,
+        account_id,
         state_file,
         realtime_bar_target,
         list_brokers):
@@ -284,7 +291,11 @@ def run(ctx,
         except AttributeError:
             ctx.fail("unsupported broker: can't import class %s from %s" %
                      (cl_name, mod_name))
-        brokerobj = bclass(broker_uri)
+
+        if account_id is '':
+            brokerobj = bclass(broker_uri)
+        else:
+            brokerobj = bclass(broker_uri, account_id)
 
     if (algotext is not None) == (algofile is not None):
         ctx.fail(
@@ -312,6 +323,7 @@ def run(ctx,
         local_namespace=local_namespace,
         environ=os.environ,
         broker=brokerobj,
+        account_id=account_id,
         state_filename=state_file,
         realtime_bar_target=realtime_bar_target
     )

@@ -39,6 +39,8 @@ class LiveAlgorithmExecutor(AlgorithmSimulator):
 class LiveTradingAlgorithm(TradingAlgorithm):
     def __init__(self, *args, **kwargs):
         self.broker = kwargs.pop('broker', None)
+        # todo(flo) this might be unnecessary - validate in the future (refer to IBBroker)
+        self.account_id = kwargs.pop('account_id', None)
         self.orders = {}
 
         self.algo_filename = kwargs.get('algo_filename', "<algorithm>")

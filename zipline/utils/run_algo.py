@@ -72,6 +72,7 @@ def _run(handle_data,
          local_namespace,
          environ,
          broker,
+         account_id,
          state_filename,
          realtime_bar_target):
     """Run a backtest for the given algorithm.
@@ -177,6 +178,7 @@ def _run(handle_data,
 
     TradingAlgorithmClass = (partial(LiveTradingAlgorithm,
                                      broker=broker,
+                                     account_id=account_id,
                                      state_filename=state_filename,
                                      realtime_bar_target=realtime_bar_target)
                              if broker else TradingAlgorithm)
