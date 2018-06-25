@@ -61,6 +61,7 @@ def _run(handle_data,
          algotext,
          defines,
          data_frequency,
+         local_benchmark,
          capital_base,
          data,
          bundle,
@@ -139,7 +140,7 @@ def _run(handle_data,
                 "invalid url %r, must begin with 'sqlite:///'" %
                 str(bundle_data.asset_finder.engine.url),
             )
-        env = TradingEnvironment(asset_db_path=connstr, environ=environ)
+        env = TradingEnvironment(asset_db_path=connstr, local_benchmark=local_benchmark, environ=environ)
         first_trading_day =\
             bundle_data.equity_minute_bar_reader.first_trading_day
 
@@ -166,7 +167,7 @@ def _run(handle_data,
                 "No PipelineLoader registered for column %s." % column
             )
     else:
-        env = TradingEnvironment(environ=environ)
+        env = TradingEnvironment(local_benchmark=local_benchmark, environ=environ)
         choose_loader = None
 
     emission_rate = 'daily'
@@ -185,6 +186,7 @@ def _run(handle_data,
         namespace=namespace,
         env=env,
         get_pipeline_loader=choose_loader,
+        local_benchmark=local_benchmark,
         sim_params=create_simulation_parameters(
             start=start,
             end=end,
@@ -275,6 +277,7 @@ def run_algorithm(start,
                   before_trading_start=None,
                   analyze=None,
                   data_frequency='daily',
+                  local_benchmark=None,
                   data=None,
                   bundle=None,
                   bundle_timestamp=None,
@@ -377,6 +380,7 @@ def run_algorithm(start,
         algotext=None,
         defines=(),
         data_frequency=data_frequency,
+        local_benchmark=local_benchmark,
         capital_base=capital_base,
         data=data,
         bundle=bundle,

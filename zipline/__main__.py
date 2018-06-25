@@ -134,6 +134,11 @@ def ipython_only(option):
     help='The data frequency of the simulation.',
 )
 @click.option(
+    '--local-benchmark',
+    default=None,
+    help='Use path to get local benchmark csv file.',
+)
+@click.option(
     '--capital-base',
     type=float,
     default=10e6,
@@ -224,6 +229,7 @@ def run(ctx,
         algotext,
         define,
         data_frequency,
+        local_benchmark,
         capital_base,
         bundle,
         bundle_timestamp,
@@ -301,6 +307,7 @@ def run(ctx,
         algotext=algotext,
         defines=define,
         data_frequency=data_frequency,
+        local_benchmark=local_benchmark,
         capital_base=capital_base,
         data=None,
         bundle=bundle,

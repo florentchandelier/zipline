@@ -23,6 +23,8 @@ from six import iteritems
 from six.moves.urllib_error import HTTPError
 
 from .benchmarks import get_benchmark_returns
+from .benchmarks import get_localcsv_benchmark_returns
+
 from . import treasuries, treasuries_can
 from ..utils.paths import (
     cache_root,
@@ -91,7 +93,7 @@ def has_data_for_dates(series_or_df, first_date, last_date):
 
 
 def load_market_data(trading_day=None, trading_days=None, bm_symbol='SPY',
-                     environ=None):
+                     local_benchmark=None, environ=None):
     """
     Load benchmark returns and treasury yield curves for the given calendar and
     benchmark symbol.
@@ -153,6 +155,7 @@ def load_market_data(trading_day=None, trading_days=None, bm_symbol='SPY',
     # We'll attempt to download new data if the latest entry in our cache is
     # before this date.
     last_date = trading_days[trading_days.get_loc(now, method='ffill') - 2]
+    logger.info("local_benchmark 2 = {}".format(local_benchmark))
 
     br = ensure_benchmark_data(
         bm_symbol,
@@ -162,6 +165,7 @@ def load_market_data(trading_day=None, trading_days=None, bm_symbol='SPY',
         # We need the trading_day to figure out the close prior to the first
         # date so that we can compute returns for the first date.
         trading_day,
+        local_benchmark,
         environ,
     )
     tc = ensure_treasury_data(
@@ -177,7 +181,7 @@ def load_market_data(trading_day=None, trading_days=None, bm_symbol='SPY',
 
 
 def ensure_benchmark_data(symbol, first_date, last_date, now, trading_day,
-                          environ=None):
+                          local_benchmark=None, environ=None):
     """
     Ensure we have benchmark data for `symbol` from `first_date` to `last_date`
 
@@ -202,17 +206,23 @@ def ensure_benchmark_data(symbol, first_date, last_date, now, trading_day,
     last entry is on or after `last_date`.
     """
     filename = get_benchmark_filename(symbol)
-    data = _load_cached_data(filename, first_date, last_date, now, 'benchmark',
-                             environ)
-    if data is not None:
-        return data
+
+    # If benchmark is local, we do not use cached data (bypassing the 'Refusing to download' constraint
+    if local_benchmark is None:
+        data = _load_cached_data(filename, first_date, last_date, now, 'benchmark',
+                                 environ)
+        if data is not None:
+            return data
 
     # If no cached data was found or it was missing any dates then download the
     # necessary data.
-    logger.info('Downloading benchmark data for {symbol!r}.', symbol=symbol)
-
     try:
-        data = get_benchmark_returns(symbol)
+        if local_benchmark is None:
+            logger.info('Downloading benchmark data for {symbol!r}.', symbol=symbol)
+            data = get_benchmark_returns(symbol)
+        else:
+            logger.info('Using local benchmark data.')
+            data = get_localcsv_benchmark_returns(symbol, local_benchmark)
         data.to_csv(get_data_filepath(filename, environ))
     except (OSError, IOError, HTTPError):
         logger.exception('failed to cache the new benchmark returns')

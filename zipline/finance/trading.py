@@ -83,19 +83,23 @@ class TradingEnvironment(object):
         trading_calendar=None,
         asset_db_path=':memory:',
         future_chain_predicates=CHAIN_PREDICATES,
+        local_benchmark=None,
         environ=None,
     ):
 
         self.bm_symbol = bm_symbol
+        self.local_benchmark = local_benchmark
+        self.environ = environ
         if not load:
-            load = partial(load_market_data, environ=environ)
+            load = partial(load_market_data, local_benchmark=self.local_benchmark, environ=self.environ)
 
-        if not trading_calendar:
-            trading_calendar = get_calendar("NYSE")
+        self.trading_calendar = trading_calendar
+        if not self.trading_calendar:
+            self.trading_calendar = get_calendar("NYSE")
 
         self.benchmark_returns, self.treasury_curves = load(
-            trading_calendar.day,
-            trading_calendar.schedule.index,
+            self.trading_calendar.day,
+            self.trading_calendar.schedule.index,
             self.bm_symbol,
         )
 
@@ -114,6 +118,16 @@ class TradingEnvironment(object):
                 future_chain_predicates=future_chain_predicates)
         else:
             self.asset_finder = None
+
+    def update_local_bench(self, local_benchmark):
+        load = partial(load_market_data, local_benchmark=local_benchmark, environ=self.environ)
+
+        self.benchmark_returns, self.treasury_curves = load(
+            self.trading_calendar.day,
+            self.trading_calendar.schedule.index,
+            self.bm_symbol,
+        )
+
 
     def write_data(self, **kwargs):
         """Write data into the asset_db.
