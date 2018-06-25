@@ -39,7 +39,10 @@ class LiveAlgorithmExecutor(AlgorithmSimulator):
 class LiveTradingAlgorithm(TradingAlgorithm):
     def __init__(self, *args, **kwargs):
         self.broker = kwargs.pop('broker', None)
+<<<<<<< Updated upstream
         # todo(flo) this might be unnecessary - validate in the future (refer to IBBroker)
+=======
+>>>>>>> Stashed changes
         self.account_id = kwargs.pop('account_id', None)
         self.orders = {}
 
@@ -47,6 +50,9 @@ class LiveTradingAlgorithm(TradingAlgorithm):
         self.state_filename = kwargs.pop('state_filename', None)
         self.realtime_bar_target = kwargs.pop('realtime_bar_target', None)
         self._context_persistence_excludes = []
+
+        if self.account_id is not '':
+            self.broker.set_account_id(self.account_id)
 
         if 'blotter' not in kwargs:
             blotter_live = BlotterLive(
