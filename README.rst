@@ -18,8 +18,6 @@ zipline-live.rst>`_ and `features <http://www.zipline-live.io/features>`_ for fu
 Features in zipline-live/flo development branch
 ============
 
-- multi-account support for single sign-on consolidated/individual or linked/advisor \
-accounts `branch <https://github.com/florentchandelier/zipline/tree/feat/specify_accountID_liveTrading>`_
+- multi-account support for single sign-on consolidated/individual or linked/advisor accounts `branch <https://github.com/florentchandelier/zipline/tree/feat/specify_accountID_liveTrading>`_
 
-- local benchmark from local csv files for unlimited history in backtest and custom benchmarks (default IEX is only \
-5yrs from current day) `branch <https://github.com/florentchandelier/zipline/tree/feat/local_benchmark>`_
+- local benchmark from local csv files for unlimited history in backtest and custom benchmarks (default IEX is only 5yrs from current day) `branch <https://github.com/florentchandelier/zipline/tree/feat/local_benchmark>`_
