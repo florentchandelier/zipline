@@ -490,16 +490,11 @@ class IBBroker(Broker):
 
         self._tws = TWSConnection(tws_uri)
 
-<<<<<<< Updated upstream
         if account_id is None and len(self._tws.managed_accounts) == 1:
             self.account_id = self._tws.managed_accounts[0]
         elif account_id is None:
             log.error("Multiple linked-accounts detected for Single Sign-On, BUT no account ID as been specified")
             self._tws.close()
-=======
-        if account_id is None:
-            self.account_id = self._tws.managed_accounts[0]
->>>>>>> Stashed changes
         else:
             self.set_account_id(account_id)
 
@@ -512,10 +507,7 @@ class IBBroker(Broker):
     def set_account_id (self, accountid):
         self.account_id = accountid
         self._tws.reqAccountUpdates (subscribe=True, acctCode=self.account_id)
-<<<<<<< Updated upstream
         log.info("Updating Linked Account to : {}".format(self.account_id))
-=======
->>>>>>> Stashed changes
 
     @property
     def subscribed_assets(self):

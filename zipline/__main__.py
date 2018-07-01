@@ -205,11 +205,7 @@ def ipython_only(option):
     '--account-id',
     default='',
     metavar='ACT-ID',
-<<<<<<< Updated upstream
     help='Account ID to trade on from a single sign-on (SSO) for consolidated/individual or linked/advisor accounts',
-=======
-    help='Specify account ID of a linked account to a master account',
->>>>>>> Stashed changes
 )
 @click.option(
     '--state-file',

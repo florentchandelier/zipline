@@ -39,10 +39,8 @@ class LiveAlgorithmExecutor(AlgorithmSimulator):
 class LiveTradingAlgorithm(TradingAlgorithm):
     def __init__(self, *args, **kwargs):
         self.broker = kwargs.pop('broker', None)
-<<<<<<< Updated upstream
+
         # todo(flo) this might be unnecessary - validate in the future (refer to IBBroker)
-=======
->>>>>>> Stashed changes
         self.account_id = kwargs.pop('account_id', None)
         self.orders = {}
 
