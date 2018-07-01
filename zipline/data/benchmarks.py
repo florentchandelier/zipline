@@ -14,8 +14,9 @@
 # limitations under the License.
 import json
 import pandas as pd
+import numpy as np
 import requests
-
+import os
 
 def get_benchmark_returns(symbol):
     """
@@ -41,3 +42,34 @@ def get_benchmark_returns(symbol):
     df = df['close']
 
     return df.sort_index().tz_localize('UTC').pct_change(1).iloc[1:]
+
+
+def get_localcsv_benchmark_returns(symbol, local_benchmark):
+    """
+    Get a Series of benchmark returns with `symbol`.
+    Default is `SPY`.
+    Parameters
+    ----------
+    symbol : str
+        Benchmark symbol for which we're getting the returns.
+    localpath : str
+        absolute path where to find benchmark csv file.
+    """
+
+    ''' open saved csv files '''
+
+    current_dir = os.getcwd()
+    os.chdir(local_benchmark)
+    filename = str(symbol + '.csv')
+    data = pd.read_csv(filename)
+    data.columns = map(str.lower, data.columns)
+
+    data['date'] = pd.to_datetime(data['date']).copy()
+    data.set_index('date', drop=False, inplace=True)
+    # data = data['close']
+    data = data['adj close']
+    os.chdir(current_dir)
+
+    data = data.fillna(method='ffill')
+
+    return data.sort_index().tz_localize('UTC').pct_change(1).iloc[1:]

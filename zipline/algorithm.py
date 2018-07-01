@@ -266,11 +266,18 @@ class TradingAlgorithm(object):
 
         self.data_portal = kwargs.pop('data_portal', None)
 
+        self.local_benchmark = kwargs.pop('local_benchmark', None)
+
+        log.info("local_benchmark = {}".format(self.local_benchmark))
+
         # If an env has been provided, pop it
         self.trading_environment = kwargs.pop('env', None)
 
         if self.trading_environment is None:
             self.trading_environment = TradingEnvironment()
+        if self.local_benchmark is not None:
+            self.trading_environment.update_local_bench(self.local_benchmark)
+
 
         # Update the TradingEnvironment with the provided asset metadata
         if 'equities_metadata' in kwargs or 'futures_metadata' in kwargs:
