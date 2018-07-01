@@ -2,7 +2,7 @@
 zipline-live | florent chandelier / development branch
 ============
 
-Welcome to zipline-live/flo development branch, built atop the original `zipline-live master github <https://github.com
+Welcome to *zipline-live/flo-development branch*, built atop the original `zipline-live master github <https://github.com
 /zipline-live/zipline>`_), the on-premise trading platform built on top of Quantopian’s
 `zipline <https://github.com/quantopian/zipline>`_.
 
@@ -20,5 +20,6 @@ Features in zipline-live/flo development branch
 
 - multi-account support for single sign-on consolidated/individual or linked/advisor
 accounts `branch <https://github.com/florentchandelier/zipline/tree/feat/specify_accountID_liveTrading>`_
+
 - local benchmark from local csv files for unlimited history in backtest and custom benchmarks (default IEX is only
 5yrs from current day) `branch <https://github.com/florentchandelier/zipline/tree/feat/local_benchmark>`_
