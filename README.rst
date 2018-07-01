@@ -2,6 +2,8 @@
 zipline-live | florent chandelier / development branch
 ============
 
+|Apache License|
+
 Welcome to *zipline-live/flo-development branch*, built atop the \
 original `zipline-live master github <https://github.com/zipline-live/zipline>`_, the on-premise trading platform \
 built on top of Quantopian’s `zipline <https://github.com/quantopian/zipline>`_.
