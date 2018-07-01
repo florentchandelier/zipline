@@ -3,7 +3,7 @@ zipline-live | florent chandelier / development branch
 ============
 
 Welcome to *zipline-live/flo-development branch*, built atop the \
-original `zipline-live master github <https://github.com/zipline-live/zipline>`_), the on-premise trading platform \
+original `zipline-live master github <https://github.com/zipline-live/zipline>`_, the on-premise trading platform \
 built on top of Quantopian’s `zipline <https://github.com/quantopian/zipline>`_.
 
 zipline-live is designed to be an extensible, drop-in replacement for zipline with multiple brokerage support to \
