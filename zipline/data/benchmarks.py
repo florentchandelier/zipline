@@ -66,8 +66,11 @@ def get_localcsv_benchmark_returns(symbol, local_benchmark):
 
     data['date'] = pd.to_datetime(data['date']).copy()
     data.set_index('date', drop=False, inplace=True)
-    # data = data['close']
-    data = data['adj close']
+    try:
+        data = data['close']
+    except:
+        data = data['adj close']
+
     os.chdir(current_dir)
 
     data = data.fillna(method='ffill')
